@@ -20,6 +20,7 @@
 #import "KeychainUtils.h"
 #import "PasswordViewController.h"
 #import "AppSettings.h"
+#import "MBProgressHUD/MBProgressHUD.h"
 
 @implementation DatabaseManager
 
@@ -130,28 +131,43 @@ static DatabaseManager *sharedInstance;
     }
 
     // Load the database
-    @try {
-        // Open the database
-        DatabaseDocument *dd = [[DatabaseDocument alloc] initWithFilename:path password:password keyFile:keyFilePath];
-
-        // Store the password in the keychain
-        if ([[AppSettings sharedInstance] rememberPasswordsEnabled]) {
+  
+      MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[MiniKeePassAppDelegate appDelegate].window animated:YES];
+      hud.labelText = NSLocalizedString(@"Decrypting", nil);
+  
+      dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        
+        @try {
+          // Open the database
+          
+          DatabaseDocument *dd = [[DatabaseDocument alloc] initWithFilename:path password:password keyFile:keyFilePath];
+          
+          // Store the password in the keychain
+          if ([[AppSettings sharedInstance] rememberPasswordsEnabled]) {
             [KeychainUtils setString:password forKey:self.selectedFilename
                       andServiceName:@"com.jflan.MiniKeePass.passwords"];
             [KeychainUtils setString:keyFile forKey:self.selectedFilename
                       andServiceName:@"com.jflan.MiniKeePass.keyfiles"];
-        }
-
-        // Dismiss the view controller, and after animation set the database document
-        [passwordViewController dismissViewControllerAnimated:YES completion:^{
+          }
+          
+          // Dismiss the view controller, and after animation set the database document
+          [passwordViewController dismissViewControllerAnimated:YES completion:^{
             // Set the database document in the application delegate
             MiniKeePassAppDelegate *appDelegate = [MiniKeePassAppDelegate appDelegate];
             appDelegate.databaseDocument = dd;
-        }];
-    } @catch (NSException *exception) {
-        NSLog(@"%@", exception);
-        [passwordViewController showErrorMessage:exception.reason];
-    }
-}
+          }];
+        } @catch (NSException *exception) {
+          NSLog(@"%@", exception);
+          dispatch_async(dispatch_get_main_queue(), ^{
+          [passwordViewController showErrorMessage:exception.reason];
+          });
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [MBProgressHUD hideHUDForView:[MiniKeePassAppDelegate appDelegate].window animated:YES];
+        });
+      });
+      
+  }
 
 @end

@@ -127,6 +127,7 @@
 		68E08310146F24E3001C4EDF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 68E0830E146F24E3001C4EDF /* Localizable.strings */; };
 		68E08316146F2749001C4EDF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 68E08314146F2749001C4EDF /* InfoPlist.strings */; };
 		68EBC2D61613394D00E8E799 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68EBC2D51613394D00E8E799 /* QuartzCore.framework */; };
+		CDF1A81D1B3FFADA00E6E652 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = CDF1A81C1B3FFADA00E6E652 /* MBProgressHUD.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -379,6 +380,7 @@
 		BDB0FF5D194C7C6F00C44DEF /* nl */ = {isa = PBXFileReference; lastKnownFileType = text; name = nl; path = nl.lproj/AppStore.txt; sourceTree = "<group>"; };
 		BDB0FF5E194C7C6F00C44DEF /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BDB0FF5F194C7C6F00C44DEF /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CDF1A81C1B3FFADA00E6E652 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = MBProgressHUD/MBProgressHUD.m; sourceTree = SOURCE_ROOT; };
 		EFD785BA15B3D02600B9A276 /* zh-Hans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		EFD785BB15B3D03F00B9A276 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -656,6 +658,7 @@
 		689DFFDF13A4273F005EBD36 /* MiniKeePass */ = {
 			isa = PBXGroup;
 			children = (
+				CDF1A81C1B3FFADA00E6E652 /* MBProgressHUD.m */,
 				68CBC1461A4A0F0E004A3553 /* MiniKeePass.entitlements */,
 				689D042613A42C81005EBD36 /* DatabaseDocument.h */,
 				689D042713A42C81005EBD36 /* DatabaseDocument.m */,
@@ -1007,6 +1010,7 @@
 				682D45191603883900156830 /* OutputStream.m in Sources */,
 				689FBE901AB27283005CB6BD /* MasterPasswordFieldCell.m in Sources */,
 				682D451A1603883900156830 /* Sha256OutputStream.m in Sources */,
+				CDF1A81D1B3FFADA00E6E652 /* MBProgressHUD.m in Sources */,
 				689FBE951AB27283005CB6BD /* TitleFieldCell.m in Sources */,
 				685D9D951603F8EE00D739D3 /* Kdb3Utils.m in Sources */,
 				6851FAFD186DD11D00A53B0E /* UIActionSheetAutoDismiss.m in Sources */,
