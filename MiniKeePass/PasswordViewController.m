@@ -92,9 +92,7 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    // This makes it so the password text field doesn't clear the field when you toggle the password visible
-    textField.text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    return NO;
+    return YES;
 }
 
 @end
