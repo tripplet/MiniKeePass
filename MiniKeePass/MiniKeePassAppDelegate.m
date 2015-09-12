@@ -56,6 +56,7 @@
 
     [self checkFileProtection];
     [MiniKeePassAppDelegate excludeInternalFilesFromBackup];
+    [MiniKeePassAppDelegate moveFilesToInternalDirectory];
 
     // Initialize the lock screen manager
     [LockScreenManager sharedInstance];
@@ -109,7 +110,7 @@
     NSString *filename = [url lastPathComponent];
 
     // Get the full path of where we're going to move the file
-    NSString *documentsDirectory = [MiniKeePassAppDelegate documentsDirectory];
+    NSString *documentsDirectory = [MiniKeePassAppDelegate internalFilesDirectory];
     NSString *path = [documentsDirectory stringByAppendingPathComponent:filename];
 
     // Move input file into documents directory
@@ -197,7 +198,7 @@
   }
 }
 
-- (void)moveFilesToInternalDirectory {
++ (void)moveFilesToInternalDirectory {
   NSString* documentsDirectory = [MiniKeePassAppDelegate documentsDirectory];
   NSString* libraryDirectory = [MiniKeePassAppDelegate internalFilesDirectory];
 
