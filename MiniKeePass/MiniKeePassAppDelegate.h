@@ -26,6 +26,7 @@
 
 + (MiniKeePassAppDelegate *)appDelegate;
 + (NSString *)documentsDirectory;
++ (NSString *)internalFilesDirectory;
 
 - (void)importUrl:(NSURL *)url;
 

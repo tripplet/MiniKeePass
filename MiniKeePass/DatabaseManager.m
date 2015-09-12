@@ -47,7 +47,7 @@ static DatabaseManager *sharedInstance;
     MiniKeePassAppDelegate *appDelegate = [MiniKeePassAppDelegate appDelegate];
     
     // Get the documents directory
-    NSString *documentsDirectory = [MiniKeePassAppDelegate documentsDirectory];
+    NSString *documentsDirectory = [MiniKeePassAppDelegate internalFilesDirectory];
     
     // Load the password and keyfile from the keychain
     NSString *password = [KeychainUtils stringForKey:self.selectedFilename
@@ -108,7 +108,7 @@ static DatabaseManager *sharedInstance;
 }
 
 - (void)openDatabaseWithPasswordViewController:(PasswordViewController *)passwordViewController {
-    NSString *documentsDirectory = [MiniKeePassAppDelegate documentsDirectory];
+    NSString *documentsDirectory = [MiniKeePassAppDelegate internalFilesDirectory];
     NSString *path = [documentsDirectory stringByAppendingPathComponent:self.selectedFilename];
 
     // Get the password
@@ -126,7 +126,7 @@ static DatabaseManager *sharedInstance;
     // Get the absolute path to the keyfile
     NSString *keyFilePath = nil;
     if (keyFile != nil) {
-        NSString *documentsDirectory = [MiniKeePassAppDelegate documentsDirectory];
+        NSString *documentsDirectory = [MiniKeePassAppDelegate internalFilesDirectory];
         keyFilePath = [documentsDirectory stringByAppendingPathComponent:keyFile];
     }
 

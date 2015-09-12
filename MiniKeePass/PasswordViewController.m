@@ -53,7 +53,7 @@
 
 - (NSArray *)keyFiles {
     // Get the documents directory
-    NSString *documentsDirectory = [MiniKeePassAppDelegate documentsDirectory];
+    NSString *documentsDirectory = [MiniKeePassAppDelegate internalFilesDirectory];
 
     // Get the list of key files in the documents directory
     NSFileManager *fileManager = [NSFileManager defaultManager];

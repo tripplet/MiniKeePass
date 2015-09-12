@@ -37,6 +37,8 @@
         [self.accessoryButton setImage:[UIImage imageNamed:@"eye"] forState:UIControlStateNormal];
         [self.accessoryButton addTarget:self action:@selector(togglePasswordVisible) forControlEvents:UIControlEventTouchUpInside];
 
+        self.textFieldCellDelegate = self;
+        
         self.accessoryView = self.accessoryButton;
     }
     return self;

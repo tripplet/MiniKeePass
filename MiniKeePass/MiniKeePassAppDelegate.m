@@ -55,6 +55,7 @@
                              object:nil];
 
     [self checkFileProtection];
+    [MiniKeePassAppDelegate excludeInternalFilesFromBackup];
 
     // Initialize the lock screen manager
     [LockScreenManager sharedInstance];
@@ -80,6 +81,27 @@
 + (NSString *)documentsDirectory {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     return [paths objectAtIndex:0];
+}
+
++ (NSString *)internalFilesDirectory {
+  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+  NSString *directory = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"files"];
+
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  BOOL isDirectory = NO;
+  [fileManager fileExistsAtPath:directory isDirectory:&isDirectory];
+
+  if (!isDirectory) {
+    [fileManager createDirectoryAtPath:directory withIntermediateDirectories:NO attributes:nil error:nil];
+  }
+
+  return directory;
+}
+
++ (void) excludeInternalFilesFromBackup {
+    NSError *error = nil;
+    [[NSURL fileURLWithPath:[MiniKeePassAppDelegate internalFilesDirectory] isDirectory:YES]
+     setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
 }
 
 - (void)importUrl:(NSURL *)url {
@@ -165,20 +187,54 @@
     for (NSString *file in files) {
         [fileManager removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:file] error:nil];
     }
+
+  NSString *internalFilesDirectory = [MiniKeePassAppDelegate internalFilesDirectory];
+  NSArray *internalFiles = [fileManager contentsOfDirectoryAtPath:internalFilesDirectory error:nil];
+
+  // Delete all the files in the Documents directory
+  for (NSString *file in internalFiles) {
+    [fileManager removeItemAtPath:[internalFilesDirectory stringByAppendingPathComponent:file] error:nil];
+  }
+}
+
+- (void)moveFilesToInternalDirectory {
+  NSString* documentsDirectory = [MiniKeePassAppDelegate documentsDirectory];
+  NSString* libraryDirectory = [MiniKeePassAppDelegate internalFilesDirectory];
+
+  // Get the contents of the documents directory
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  NSArray *dirContents = [fileManager contentsOfDirectoryAtPath:documentsDirectory error:nil];
+
+  // Check all files
+  for (NSString *file in dirContents) {
+    if (![file hasPrefix:@"."]) {
+      NSString *old_path = [documentsDirectory stringByAppendingPathComponent:file];
+      NSString *new_path = [libraryDirectory stringByAppendingPathComponent:file];
+
+      BOOL dir = NO;
+      [fileManager fileExistsAtPath:old_path isDirectory:&dir];
+
+      if (!dir) {
+        [fileManager moveItemAtPath:old_path toPath:new_path error:nil];
+      }
+    }
+  }
 }
 
 - (void)checkFileProtection {
-    // Get the document's directory
-    NSString *documentsDirectory = [MiniKeePassAppDelegate documentsDirectory];
+  [self checkFileProtection: [MiniKeePassAppDelegate documentsDirectory]];
+  [self checkFileProtection: [MiniKeePassAppDelegate internalFilesDirectory]];
+}
 
+- (void)checkFileProtection:(NSString*) directory {
     // Get the contents of the documents directory
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSArray *dirContents = [fileManager contentsOfDirectoryAtPath:documentsDirectory error:nil];
+    NSArray *dirContents = [fileManager contentsOfDirectoryAtPath:directory error:nil];
 
     // Check all files to see if protection is enabled
     for (NSString *file in dirContents) {
         if (![file hasPrefix:@"."]) {
-            NSString *path = [documentsDirectory stringByAppendingPathComponent:file];
+            NSString *path = [directory stringByAppendingPathComponent:file];
 
             BOOL dir = NO;
             [fileManager fileExistsAtPath:path isDirectory:&dir];
