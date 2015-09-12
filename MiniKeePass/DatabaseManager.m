@@ -131,6 +131,7 @@ static DatabaseManager *sharedInstance;
     }
 
     // Load the database
+    [[MiniKeePassAppDelegate appDelegate].window endEditing:YES];
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[MiniKeePassAppDelegate appDelegate].window animated:YES];
     hud.labelText = NSLocalizedString(@"Decrypting", nil);
 
@@ -157,6 +158,7 @@ static DatabaseManager *sharedInstance;
             NSLog(@"%@", exception);
             dispatch_async(dispatch_get_main_queue(), ^{
                 [passwordViewController showErrorMessage:exception.reason];
+                [passwordViewController.masterPasswordFieldCell.textField becomeFirstResponder];
             });
         }
 
